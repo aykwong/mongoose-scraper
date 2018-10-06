@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var logger = require("morgan");
-var path = require('path');
 var mongoose = require("mongoose");
 var exphbs = require("express-handlebars");
 
@@ -23,6 +22,7 @@ app.set("view engine", "handlebars");
 // Use morgan logger for logging requests
 app.use(logger("dev"));
 
+require("./routes/html-routes.js")(app);
 require("./routes/index.js")(app);
 
 // Start the server

@@ -3,8 +3,9 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 const NoteSchema = new Schema({
-    title: { type: String, trim: true, default: 'Lorem Ipsum' },
-    body: { type: String, default: 'Lorem Ipsum' }
+    title: { type: String },
+    body: { type: String },
+    id: { type: String }
 });
 
 var Note = mongoose.model("Note_db", NoteSchema);

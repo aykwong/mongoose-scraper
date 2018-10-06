@@ -3,7 +3,11 @@ var cheerio = require("cheerio");
 var db = require("../models");
 
 module.exports = function (app) {
-  app.get('/scrape', function (req, res) {
+  app.get('/remove', function (req, res) {
+    db.Article.deleteMany(function (err, result) {
+      if (err) throw err;
+      if (result) console.log("Collection deleted");
+    });
     request("http://www.echojs.com/", function (err, response, html) {
 
       var $ = cheerio.load(response.body);
@@ -27,13 +31,28 @@ module.exports = function (app) {
             return res.json(err);
           });
       });
+
       console.log("Scraping complete!");
     });
   });
 
-  app.get('/newArticles', function (req, res) {
-    // Save a new entry using the data object
-    db.Article.find({})
+  app.get("/Articles/:id", function (req, res) {
+    db.Article.findOne({ _id: req.params.id })
+      .populate("note")
+      .then(function (dbArticle) {
+        res.json(dbArticle);
+      })
+      .catch(function (err) {
+        res.json(err);
+      });
+  });
+
+  app.post("/Articles/:id", function (req, res) {
+    // Create a new note and pass the req.body to the entry
+    db.Note.create(req.body)
+      .then(function (dbNote) {
+        return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+      })
       .then(function (dbArticle) {
         res.json(dbArticle);
       })
@@ -42,28 +61,3 @@ module.exports = function (app) {
       });
   });
 };
-
-app.get("/Articles/:id", function(req, res) {
-  db.Article.findOne({ _id: req.params.id })
-    .populate("note")
-    .then(function(dbArticle) {
-      res.json(dbArticle);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
-});
-
-app.post("/Articles/:id", function(req, res) {
-  // Create a new note and pass the req.body to the entry
-  db.Note.create(req.body)
-    .then(function(dbNote) {
-      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
-    })
-    .then(function(dbArticle) {
-      res.json(dbArticle);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
-});
