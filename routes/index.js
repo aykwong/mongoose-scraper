@@ -36,28 +36,42 @@ module.exports = function (app) {
     });
   });
 
-  app.get("/Articles/:id", function (req, res) {
-    db.Article.findOne({ _id: req.params.id })
-      .populate("note")
-      .then(function (dbArticle) {
-        res.json(dbArticle);
+  app.get("/Notes/:id", function (req, res) {
+    db.Note.findOne({ id: req.params.id })
+      .then(function (dbNote) {
+        // If we were able to successfully find Articles, send them back to the client
+        console.log(dbNote);
+        res.json(dbNote);
       })
       .catch(function (err) {
+        // If an error occurred, send it to the client
         res.json(err);
       });
   });
 
-  app.post("/Articles/:id", function (req, res) {
-    // Create a new note and pass the req.body to the entry
-    db.Note.create(req.body)
-      .then(function (dbNote) {
-        return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
-      })
-      .then(function (dbArticle) {
-        res.json(dbArticle);
+  app.post("/Notes/", function (req, res) {
+    db.Note.deleteOne({ id: req.body.id })
+      .then(function (err, result) {
+        if (result) console.log("Collection deleted");
       })
       .catch(function (err) {
-        res.json(err);
+        console.log("Delete error, " + err);
+      })
+
+    var result = {};
+    result.title = req.body.title;
+    result.body = req.body.body;
+    result.id = req.body.id;
+
+    db.Note.create(result)
+      .then(function (dbNote) {
+        console.log("created, " + dbNote);
+        res.send(true);
+      })
+      .catch(function (err) {
+        // If an error occurred, send it to the client
+        res.send(false);
+        return (err);
       });
   });
 };

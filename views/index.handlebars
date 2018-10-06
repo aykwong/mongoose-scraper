@@ -12,7 +12,7 @@
                 <a href={{this.link}}><h5 class="card-title">{{this.title}}</h5></a>
                 <p class="card-text">{{this.body}}</p>
             </div>
-        <button id="{{this._id}}" data-toggle="modal" data-target="#note">Add a Note</button>
+        <form action="/Notes/{{this._id}}" id="{{this._id}}" data-toggle="modal" data-target="#note">Add a Note</form>
     </div>
     {{/each}}
 
@@ -30,13 +30,13 @@
                     <form>
                         <div class="form-group">
                             <label for="note-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="note-text"></textarea>
+                            <textarea class="form-control" id="note-text">{{this.body}}</textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <form action="/Articles/{{this._id}}" method="POST" class="btn btn-primary">Set Note</form>
+                    <form action="/Notes/" method="POST" class="btn btn-primary">Set Note</form>
                     <form action="/Articles/{{this._id}}" method="POST" class="btn btn-primary">Save Article</form>
                 </div>
             </div>
