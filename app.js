@@ -5,7 +5,10 @@ var mongoose = require("mongoose");
 var exphbs = require("express-handlebars");
 
 // mongoose connect
-mongoose.connect("mongodb://localhost/mongooseScraper", { useNewUrlParser: true });
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongooseScraper";
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+
 
 var app = express();
 var PORT = process.env.PORT || 8080;
