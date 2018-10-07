@@ -23,7 +23,7 @@
             <button class="btn btn-primary" data-id="{{this._id}}" data-toggle="modal" data-target=".note">
                 Add a Note
             </button>
-            <button class="btn btn-danger" data-id="{{this._id}}" data-toggle="modal" data-target=".saveArticle" id="saveArticle">
+            <button class="btn btn-danger saveArticle" data-id="{{this._id}}" data-toggle="modal" data-target="#saveArticle">
                 Save Article
             </button>
         </div>
@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    <div class="modal fade saveArticle" tabindex="-1" role="dialog" aria-labelledby="Article" aria-hidden="true">
+    <div class="modal fade" id="saveArticle" tabindex="-1" role="dialog" aria-labelledby="Article" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

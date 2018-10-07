@@ -1,6 +1,9 @@
 var currentId;
 
 $('#scrape').on("click", function () {
+    $(this).text("Refreshing, please wait...");
+    $(this).removeClass("btn-info");
+    $(this).addClass("btn-warning");
     $.ajax({
         type: "GET",
         url: '/remove'
@@ -8,14 +11,14 @@ $('#scrape').on("click", function () {
         console.log('Refreshing');
         setTimeout(function () {
             window.location.replace('/');
-        }, 5000);
+        }, 3000);
     })
 })
 
-$('#saveArticle').on("click", function () {
+$('.saveArticle').on("click", function () {
     let id = $(this).data("id");
     $.ajax({
-        type: "PUT",
+        type: "POST",
         url: `/Articles/${id}`
     }).then(function (data) {
         console.log("Request Completed");
