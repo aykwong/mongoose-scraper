@@ -28,7 +28,17 @@ $('.saveArticle').on("click", function () {
         type: "POST",
         url: `/Articles/${id}`
     }).then(function (data) {
-        console.log("Request Completed");
+        console.log("Article Saved!");
+    })
+});
+
+$('.unsaveArticle').on("click", function () {
+    let id = $(this).data("id");
+    $.ajax({
+        type: "POST",
+        url: `/Articles/unsave/${id}`
+    }).then(function (data) {
+        console.log("Article Unsaved!");
     })
 });
 
@@ -40,7 +50,12 @@ $(".noteModal").on("click", function () {
         type: "GET",
         url: `/Notes/${myVal}`
     }).then(function (NoteData) {
-        $("#note-text").val(NoteData[0].message);
+        console.log(NoteData);
+        if (NoteData.length === 1) {
+            $("#note-text").val(NoteData[0].message);
+        } else {
+            $("#note-text").val("");
+        }
     })
 });
 
@@ -63,8 +78,4 @@ $("#saveNote").on("click", function () {
             window.location.replace('/');
         }, 2000);
     })
-});
-
-$(".disappear").on("click", function () {
-    $("#note-text").val("");
 });

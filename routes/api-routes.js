@@ -48,10 +48,23 @@ module.exports = function (app) {
       });
   });
 
+  app.post("/Articles/unsave/:id", function (req, res) {
+    db.Article.updateOne(
+      { _id: req.params.id },
+      { $set: { saved: false } }
+    ).then(function (dbArticle) {
+      console.log(dbArticle);
+      res.send(true);
+    })
+      .catch(function (err) {
+        console.log(dbArticle)
+        res.json(err);
+      });
+  });
+
   app.get("/Notes/:id", function (req, res) {
     db.Note.find({ articleId: req.params.id }).limit(1).sort({ $natural: -1 })
       .then(function (dbNote) {
-        console.log(dbNote);
         res.json(dbNote);
       })
       .catch(function (err) {
