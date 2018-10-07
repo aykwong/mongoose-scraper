@@ -20,12 +20,10 @@ module.exports = function (app) {
         result.title = $(element).children("a").text();
         result.link = $(element).children("a").attr("href");
 
-        console.log(result);
-
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)
           .then(function (dbArticle) {
-            console.log(dbArticle);
+
           })
           .catch(function (err) {
             return res.json(err);
@@ -33,7 +31,24 @@ module.exports = function (app) {
       });
 
       console.log("Scraping complete!");
+      res.json(true);
     });
+  });
+
+  app.post("/Articles/:id", function (req, res) {
+    db.Article.updateOne(
+      { _id: req.params.id },
+      { $set: { saved: true } }
+    ).then(function (dbArticle) {
+      // If we were able to successfully find Articles, send them back to the client
+      console.log(dbArticle);
+      res.send(true);
+    })
+      .catch(function (err) {
+        console.log(dbArticle)
+        // If an error occurred, send it to the client
+        res.json(err);
+      });
   });
 
   app.get("/Notes/:id", function (req, res) {

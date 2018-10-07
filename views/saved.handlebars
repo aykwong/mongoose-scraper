@@ -1,14 +1,11 @@
 <div class="container">
     <div class="jumbotron">
         <h1>Welcome to Mongoose Scraper!</h1>
-        <a href="/saved">
-            <button class="btn btn-primary" id="saved">
-                Saved Articles
+        <a href="/">
+            <button class="btn btn-primary" id="home">
+                Back to Articles
             </button>
         </a>
-        <button class="btn btn-info" id="scrape">
-            Scrape Articles
-        </button>
     </div>
 
     {{#each articles}}
@@ -19,18 +16,13 @@
             </a>
             <p class="card-text">{{this.body}}</p>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" data-id="{{this._id}}" data-toggle="modal" data-target=".note">
-                Add a Note
-            </button>
-            <button class="btn btn-danger" data-id="{{this._id}}" data-toggle="modal" data-target=".saveArticle" id="saveArticle">
-                Save Article
-            </button>
-        </div>
+        <button class="btn btn-primary" action="/Notes/{{this._id}}" id="{{this._id}}" data-toggle="modal" data-target="#note">
+            Add a Note
+        </button>
     </div>
     {{/each}}
 
-    <div class="modal fade note" tabindex="-1" role="dialog" aria-labelledby="Note" aria-hidden="true">
+    <div class="modal fade" id="note" tabindex="-1" role="dialog" aria-labelledby="Note" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -49,20 +41,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn btn-primary" data={{this.id}} id="saveNote">Set Note</form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade saveArticle" tabindex="-1" role="dialog" aria-labelledby="Article" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Article Saved!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <form action="/Notes/" method="POST" class="btn btn-primary">Set Note</form>
+                    <form action="/Articles/{{this._id}}" method="POST" class="btn btn-primary">Save Article</form>
                 </div>
             </div>
         </div>
