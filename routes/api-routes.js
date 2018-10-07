@@ -22,9 +22,6 @@ module.exports = function (app) {
 
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)
-          .then(function (dbArticle) {
-
-          })
           .catch(function (err) {
             return res.json(err);
           });
@@ -52,41 +49,30 @@ module.exports = function (app) {
   });
 
   app.get("/Notes/:id", function (req, res) {
-    db.Note.findOne({ id: req.params.id })
+    db.Note.find({ articleId: req.params.id }).limit(1).sort({ $natural: -1 })
       .then(function (dbNote) {
-        // If we were able to successfully find Articles, send them back to the client
         console.log(dbNote);
         res.json(dbNote);
       })
       .catch(function (err) {
-        // If an error occurred, send it to the client
         res.json(err);
       });
   });
 
-  app.post("/Notes/", function (req, res) {
-    db.Note.deleteOne({ id: req.body.id })
-      .then(function (err, result) {
-        if (result) console.log("Collection deleted");
-      })
-      .catch(function (err) {
-        console.log("Delete error, " + err);
-      })
+  app.post("/Notes", function (req, res) {
+    let result = {};
 
-    var result = {};
-    result.title = req.body.title;
-    result.body = req.body.body;
-    result.id = req.body.id;
+    result.articleId = req.body.articleId;
+    result.message = req.body.message;
 
     db.Note.create(result)
       .then(function (dbNote) {
-        console.log("created, " + dbNote);
-        res.send(true);
+        console.log(dbNote);
+        console.log('Note Saved!');
+        res.json(true);
       })
       .catch(function (err) {
-        // If an error occurred, send it to the client
-        res.send(false);
-        return (err);
+        return res.json(err);
       });
   });
 };

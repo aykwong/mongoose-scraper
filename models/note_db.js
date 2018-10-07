@@ -3,9 +3,8 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 const NoteSchema = new Schema({
-    title: { type: String },
-    body: { type: String },
-    id: { type: String }
+    articleId: { type: String },
+    message: { type: String }
 });
 
 var Note = mongoose.model("Note_db", NoteSchema);

@@ -11,8 +11,15 @@ $('#scrape').on("click", function () {
         console.log('Refreshing');
         setTimeout(function () {
             window.location.replace('/');
-        }, 3000);
+        }, 2000);
     })
+});
+
+$('#saved').on("click", function () {
+    $.ajax({
+        type: "GET",
+        url: `/saved`
+    });
 })
 
 $('.saveArticle').on("click", function () {
@@ -23,68 +30,41 @@ $('.saveArticle').on("click", function () {
     }).then(function (data) {
         console.log("Request Completed");
     })
-})
+});
 
-$(document).on("click", ".save-article", function () {
-    var id = ($(this).parent().parent().parent().data("id"));
-    var self = $(this);
+$(".noteModal").on("click", function () {
+    var myVal = $(this).data("id");
+    $(".modal-footer #saveNote").val(myVal);
+
     $.ajax({
-        type: "PUT",
-        url: `/api/articles/${id}`
-    }).then(function (data) {
-        if (data === false) {
-            console.log("false");
-            self.removeClass("btn-danger");
-            self.addClass("btn-primary").text("Save Article");
-        } else if (data === true) {
-            console.log("true");
-            self.removeClass("btn-primary");
-            self.addClass("btn-danger").text("Saved!");
-
-        }
+        type: "GET",
+        url: `/Notes/${myVal}`
+    }).then(function (NoteData) {
+        $("#note-text").val(NoteData[0].message);
     })
 });
 
-$(document).on("click", ".view-comment", function () {
-    currentId = ($(this).parent().parent().parent().data("id"));
+$("#saveNote").on("click", function () {
+    let id = $(this).val();
+    let message = $("#note-text").val();
+    console.log(message);
     $.ajax({
-        type: "get",
-        url: `/api/notes/${currentId}`
-    }).then(function (data) {
-        $("#noteHead").text(data.title);
-        $("#noteBody").text(data.body);
-    })
-    $("#modal").modal();
-})
-
-$("#deleteModal").on("click", function () {
-    $.ajax({
-        type: "delete",
-        url: "/api/notes/",
+        type: "POST",
+        url: `/Notes`,
         data: {
-            id: currentId
+            articleId: id,
+            message: message
         }
     }).then(function (data) {
-        console.log("Request sent");
-        $("#noteHead").text("Comment");
-        $("#noteBody").text("");
-    });
+        $("#saveNote").removeClass("btn-primary");
+        $("#saveNote").addClass("btn-warning");
+        $("#saveNote").text("message saved! Refreshing..");
+        setTimeout(function () {
+            window.location.replace('/');
+        }, 2000);
+    })
 });
 
-$("#saveModal").on("click", function () {
-    var title = $("#title").val();
-    var body = $("#body").val();
-    console.log(currentId);
-    $.ajax({
-        type: "post",
-        url: "/api/notes/",
-        data: {
-            title: title,
-            body: body,
-            id: currentId
-        }
-    }).then(function (data) {
-        $("#noteHead").text(title);
-        $("#noteBody").text(body);
-    })
+$(".disappear").on("click", function () {
+    $("#note-text").val("");
 });

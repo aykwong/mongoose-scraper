@@ -19,12 +19,10 @@ module.exports = function (app) {
     app.get("/saved", function (req, res) {
         db.Article.find({
             saved: true
-        })
-            .then(function (dbSaved) {
+        }).then(function (dbSaved) {
                 var hbObj = {
                     save: dbSaved
                 }
-
                 res.render("saved", hbObj);
             })
             .catch(function (err) {
