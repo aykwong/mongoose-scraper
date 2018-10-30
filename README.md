@@ -9,12 +9,6 @@ Fork the repo and download the files to your computer. Create the necessary npm 
 ```
 npm init -y
 npm i
-npm i express
-npm i path
-npm i mongoose
-npm i cheerio
-npm i body-parser
-npm i express-handlebars
 ```
 
 You can run the application using node like so:
